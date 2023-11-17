@@ -106,13 +106,15 @@ class EmployeesController extends Controller
         {
             $statusCode = 200;
             $employees = employees::find($id);
-    
+            
+            //jika id yg dicari adalah valid/ada
             if ($employees) {
                 $data = [
                     'message' => 'Get Detail Resource',
                     'data' => $employees
                 ];
             } else {
+                //jika data yg dicari null/tidak ada
                 $data = [
                     'message' => 'Resource not found',
                     'data' => null
@@ -121,6 +123,7 @@ class EmployeesController extends Controller
                 $statusCode = 404;
             }
     
+            //output yang diterima user
             return response()->json($data, $statusCode);
         }
     }
@@ -160,6 +163,7 @@ class EmployeesController extends Controller
             ];
         }
 
+        //output yang diterima user
         return response()->json($data, 200);
     }
 
@@ -170,8 +174,10 @@ class EmployeesController extends Controller
     {
         //
         $statusCode = 200;
+        //mengambil data dati database sesuai dengan id
         $employees = employees::find($id);
 
+        //percabangan jika data yg dicari ditemukan
         if ($employees) {
             $employees->delete();
 
@@ -179,6 +185,7 @@ class EmployeesController extends Controller
                 'message' => 'Resource is delete successfully',
             ];
         } else {
+            //percabangan jika data yg dicari ditemukan
             $data = [
                 'message' => 'Resource not found',
             ];
@@ -186,7 +193,7 @@ class EmployeesController extends Controller
             $statusCode = 404;
         }
 
-
+        //output yang diterima user
         return response()->json($data, $statusCode);
     }
 
@@ -214,12 +221,12 @@ class EmployeesController extends Controller
 
     public function status(string $status)
     {
-        
+        //mengambil data dari database sesuai status yg diminta
         $employees = employees::where('status', $status)
             ->get();
         $count = $employees->count();
 
-        
+        //permisalan jika status yang dicari tidak ada datanya
         if($employees->isEmpty()) {
             return response()->json([
                 'message' => 'Resource not Found',
@@ -228,6 +235,7 @@ class EmployeesController extends Controller
         }
         
         if ($status=="Active") {
+            //status pekerja adalah aktif
             return response()->json([
                 'message' => 'Get Active resource',
                 'total'=> $count,
@@ -235,6 +243,7 @@ class EmployeesController extends Controller
                 'code' => 200,
             ]);
         }elseif ($status=="InActive") {
+            //status pekerja adalah tidak aktif
             return response()->json([
                 'message' => 'Get InActive Resource',
                 'total'=> $count,
@@ -242,6 +251,7 @@ class EmployeesController extends Controller
                 'code' => 200,
             ]);
         }elseif ($status=="Terminated") {
+            //status pekerja alah disingkirkan/ dipecat
             return response()->json([
                 'message' => 'Get Terminated Resource',
                 'total'=> $count,
