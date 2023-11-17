@@ -33,15 +33,6 @@ class EmployeesController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-        
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -97,7 +88,7 @@ class EmployeesController extends Controller
             //jika berhasil tervalidasi
             $employees = employees::create($validator->validate());
             $data = [
-                'message' => 'Data Pegawai berhasil dibuat',
+                'message' => 'Resource is added successfully',
                 'data' => $employees
             ];
         }
@@ -118,12 +109,12 @@ class EmployeesController extends Controller
     
             if ($employees) {
                 $data = [
-                    'message' => 'Data Pegawai ditemukan',
+                    'message' => 'Get Detail Resource',
                     'data' => $employees
                 ];
             } else {
                 $data = [
-                    'message' => 'Data Pegawai tidak ditemukan',
+                    'message' => 'Resource not found',
                     'data' => null
                 ];
     
@@ -132,14 +123,6 @@ class EmployeesController extends Controller
     
             return response()->json($data, $statusCode);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
     /**
@@ -167,12 +150,12 @@ class EmployeesController extends Controller
             $employees->update($input);
 
             $data = [
-                'message' => 'Pembaruan data Pegawai Berhasil',
+                'message' => 'Resource is Update Succesfully',
                 'data' => $employees
             ];
         } else {
             $data = [
-                'message' => 'Pegawai tidak ditemukan',
+                'message' => 'Resource not found',
                 'data' => null
             ];
         }
@@ -193,11 +176,11 @@ class EmployeesController extends Controller
             $employees->delete();
 
             $data = [
-                'message' => 'ID: ' . $id . ' Pegawai Berhasil dihapus',
+                'message' => 'Resource is delete successfully',
             ];
         } else {
             $data = [
-                'message' => 'Pegawai tidak ditemukan',
+                'message' => 'Resource not found',
             ];
 
             $statusCode = 404;
@@ -216,14 +199,14 @@ class EmployeesController extends Controller
         //percabangan jika tidak menemukan
         if ($employees->isEmpty()) {
             return response()->json([
-                'message' => 'Pegawai Tidak Ditemukan',
+                'message' => 'Resource not Found',
                 'code' => 404,
             ]);
         }
 
         //jika menemukan
         return response()->json([
-            'message' => 'Pegawai Ditemukan',
+            'message' => 'Get Searched resource',
             'data' => $employees,
             'code' => 200,
         ]);
@@ -234,30 +217,34 @@ class EmployeesController extends Controller
         
         $employees = employees::where('status', $status)
             ->get();
+        $count = $employees->count();
 
         
         if($employees->isEmpty()) {
             return response()->json([
-                'message' => 'Data Pegawai Tidak Ditemukan',
+                'message' => 'Resource not Found',
                 'code' => 404,
             ]);
         }
         
         if ($status=="Active") {
             return response()->json([
-                'message' => 'Data Pegawai Aktif',
+                'message' => 'Get Active resource',
+                'total'=> $count,
                 'data' => $employees,
                 'code' => 200,
             ]);
         }elseif ($status=="InActive") {
             return response()->json([
-                'message' => 'Data Pegawai Tidak Aktif',
+                'message' => 'Get InActive Resource',
+                'total'=> $count,
                 'data' => $employees,
                 'code' => 200,
             ]);
         }elseif ($status=="Terminated") {
             return response()->json([
-                'message' => 'Data Pegawai Dipecar',
+                'message' => 'Get Terminated Resource',
+                'total'=> $count,
                 'data' => $employees,
                 'code' => 200,
             ]);
